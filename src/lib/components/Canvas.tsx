@@ -1,42 +1,68 @@
 'use client'
 
-import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core'
 import { useState } from 'react'
-import { Draggable } from './drag-and-drop/Draggable'
 import { Droppable } from './drag-and-drop/Droppable'
+import { useClientOnly } from '@/hooks/use-client-only'
+import { Preview } from './fields/Preview'
+
+const DROPPABLE_ID = 'zone-1'
 
 export function Canvas() {
-  const [hasDropped, setHasDropped] = useState(false)
+  const mounted = useClientOnly()
+  const [components, setComponents] = useState<Array<{ id: string | number; type: string }>>([])
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const [draggingItem, setDraggingItem] = useState<React.ReactNode | null>(null)
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    if (event.over?.id === 'droppable') {
-      setHasDropped(true)
-    }
+  if (!mounted) return null;
+
+  const handleDragStart = (event: any) => {
+    setActiveId(event.active.id)
+    setDraggingItem(event.active.data.current?.node)
   }
 
-  return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="p-4 flex gap-8 items-start">
-        {!hasDropped && (
-          <Draggable>
-            <div className="bg-primary text-primary-foreground px-4 py-2 rounded shadow">
-              Arrastrar
-            </div>
-          </Draggable>
-        )}
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
 
-        <Droppable>
-          <div className="border-2 border-dashed border-muted-foreground rounded p-8 min-w-[200px] min-h-[100px] text-muted-foreground">
-            {hasDropped ? (
-              <div className="bg-primary text-primary-foreground px-4 py-2 rounded shadow">
-                Soltado
-              </div>
+    if (over?.id === DROPPABLE_ID && active.data.current) {
+      setComponents((prev) => [
+        ...prev,
+        {
+          id: String(active.id),
+          type: String(active.data.current?.type ?? ''),
+        },
+      ]);
+    }
+
+    setActiveId(null);
+    setDraggingItem(null);
+  };
+
+  return (
+    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className="p-4 flex gap-8 items-start h-full">
+        <Droppable id={DROPPABLE_ID} accepts={['basic']}>
+          <div className="w-full h-full border-2 border-dashed border-muted-foreground rounded p-8 text-muted-foreground">
+            {components.length > 0 ? (
+              components.map((component, index) => (
+                <div key={`${component.id}-${index}`} className="mb-4">
+                  {renderComponent(component)}
+                </div>
+              ))
             ) : (
-              "Soltar"
+              <p className='select-none'>Drag a component here</p>
             )}
           </div>
         </Droppable>
       </div>
+
+      <DragOverlay dropAnimation={null}>
+        {activeId ? draggingItem : null}
+      </DragOverlay>
     </DndContext>
   )
+}
+
+function renderComponent(component: { id: string | number; type: string }) {
+  return <Preview title={component.type} />
 }

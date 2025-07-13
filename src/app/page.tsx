@@ -6,11 +6,11 @@ import { Canvas } from "@/lib/components/Canvas";
 export default function Home() {
 
   return (
-    <main className="flex min-h-screen w-full font-[family-name:var(--font-geist-sans)]">
+    <main className="flex min-w-full min-h-screen font-[family-name:var(--font-geist-sans)]">
       <div className="w-64 border-r border-border">
         <LeftSidebar />
       </div>
-      <div className="flex-1 p-6 overflow-auto">
+      <div className="flex-1 p-2 overflow-auto w-full min-h-full">
         <Canvas />
       </div>
     </main>

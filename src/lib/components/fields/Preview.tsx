@@ -3,11 +3,11 @@
 import { InputField, SelectField, ButtonField } from './index'
 
 type Props = {
-  title: string
+  type: string
 }
 
-export const Preview = ({ title }: Props) => {
-  switch (title.toLowerCase()) {
+export const Preview = ({ type }: Props) => {
+  switch (type.toLowerCase()) {
     case 'text':
       return <InputField label="Text" placeholder="Enter text" type="text" />
     case 'email':
@@ -20,7 +20,7 @@ export const Preview = ({ title }: Props) => {
       return <ButtonField text="Click me" />
     default:
       return (
-        <div className="text-muted-foreground text-sm border border-dashed p-2 rounded">
+        <div className="text-muted-foreground text-sm border h-full w-full">
           Unknown component
         </div>
       )

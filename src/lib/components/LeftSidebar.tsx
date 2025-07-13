@@ -37,14 +37,14 @@ export function LeftSidebar() {
                 {groupName}
               </SidebarGroupLabel>
               <SidebarGroupContent>
-                <div className="grid grid-cols-3 gap-3 mt-1">
+                <div className="grid grid-cols-3 gap-2 mt-1">
                   {items.map((item) => (
                     <Draggable
                       key={item.title}
                       id={`component-${item.name}`}
                       data={{
                         type: item.name,
-                        node: <Preview title={item.title} />,
+                        node: <Preview type={item.name} />
                       }}
                     >
                       <CardComponent

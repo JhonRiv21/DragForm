@@ -5,24 +5,29 @@ import React from 'react'
 
 type Props = {
   id: string
-  accepts?: string[]
   children: React.ReactNode
-  className?: string
+  accepts?: string[]
 }
 
-export const Droppable = ({ id, accepts, children, className = '' }: Props) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id,
-    data: {
-      accepts,
-    },
-  })
+export const Droppable = ({ id, children }: Props) => {
+  const { isOver, setNodeRef } = useDroppable({ id })
 
   return (
     <div
       ref={setNodeRef}
-      className={`transition-colors duration-200 rounded border-2 border-dashed w-full h-full
-        ${isOver ? 'bg-muted' : 'bg-background'} ${className}`}
+      className={`
+        w-full
+        min-h-[92dvh]
+        border-2
+        border-dashed
+        rounded-lg
+        p-6
+        text-muted-foreground
+        transition-colors
+        duration-200
+        ease-in-out
+        ${isOver ? 'bg-muted/40 border-primary' : 'bg-background border-muted-foreground'}
+      `}
     >
       {children}
     </div>

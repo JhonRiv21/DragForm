@@ -1,3 +1,7 @@
-export const Placeholder = () => (
-  <div className="w-full h-20 bg-primary/5 border-2 border-dashed border-primary rounded-md transition-all duration-150 ease-in-out" />
-)
+export const Placeholder = () => {
+  return (
+    <div
+      className="h-12 bg-primary/10 border border-dashed border-gray-500 rounded-md transition-all duration-150 ease-in-out"
+    />
+  )
+}

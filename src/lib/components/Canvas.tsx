@@ -11,21 +11,30 @@ type ComponentItem = {
 
 type Props = {
   components: ComponentItem[]
+  isOver: boolean
 }
 
-export function Canvas({ components }: Props) {
+export function Canvas({ components, isOver }: Props) {
+  const isEmpty = components.length === 0
+  
   return (
     <div className="p-4 flex gap-8 items-start flex-1">
       <Droppable id="canvas-dropzone">
-        {components.length > 0 ? (
-          components.map((component, index) => (
-            <div key={`${component.id}-${index}`} className="mb-4">
+        <div className="space-y-4 w-full">
+          {components.map((component, index) => (
+            <div key={`${component.id}-${index}`}>
               <Preview type={component.type} />
             </div>
-          ))
-        ) : (
-          <p className="select-none text-center text-xl mt-[25%]">Drag a component here</p>
-        )}
+          ))}
+
+          {isOver && <Placeholder />}
+
+          {isEmpty && !isOver && (
+            <div className="text-muted-foreground text-center mt-[25%] text-lg select-none">
+              Drag a component here
+            </div>
+          )}
+        </div>
       </Droppable>
     </div>
   )

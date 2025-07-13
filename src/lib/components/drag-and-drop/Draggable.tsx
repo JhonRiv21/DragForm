@@ -1,23 +1,22 @@
 'use client'
 
 import { useDraggable } from '@dnd-kit/core'
-import React from 'react'
+import { type DraggableData } from '../../types/Draggable' 
 
 type Props = {
   id: string
-  data?: Record<string, any>
+  data?: DraggableData
   children: React.ReactNode
 }
 
 export const Draggable = ({ id, data, children }: Props) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id,
-    data,
-  })
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id, data })
 
-  const style = transform
-    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
-    : undefined
+  const style = {
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    opacity: isDragging ? 0.5 : 1,
+    transition: 'opacity 0.2s ease',
+  }
 
   return (
     <div
@@ -25,7 +24,7 @@ export const Draggable = ({ id, data, children }: Props) => {
       style={style}
       {...listeners}
       {...attributes}
-      className="inline-block cursor-grab active:cursor-grabbing"
+      className="cursor-grab active:cursor-grabbing"
     >
       {children}
     </div>

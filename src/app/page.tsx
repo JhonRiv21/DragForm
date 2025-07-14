@@ -50,6 +50,10 @@ export default function App() {
     setIsOverCanvas(false)
   }
 
+  const handleDelete = (id: string | number) => {
+    setComponents((prev) => prev.filter((component) => component.id !== id))
+  }
+
   return (
     <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <div className="flex h-screen w-full">
@@ -57,7 +61,7 @@ export default function App() {
           <LeftSidebar />
         </div>
         <div className="flex-1 p-2 overflow-auto w-full min-h-full">
-          <Canvas components={components} isOver={isOverCanvas} />
+          <Canvas components={components} isOver={isOverCanvas} onDelete={handleDelete} />
           <DragOverlay dropAnimation={null}>
             {activeType && activeIcon && activeTitle ? (
               <CardComponent icon={activeIcon} title={activeTitle} />
